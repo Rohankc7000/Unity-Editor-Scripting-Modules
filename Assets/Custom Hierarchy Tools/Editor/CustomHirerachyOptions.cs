@@ -15,8 +15,9 @@ public class CustomHirerachyOptions
 		DrawActiveToggleButton(instanceID, selectionRect);
 		AddInfoScriptToGameObject(instanceID);
 		DrawInfoButton(instanceID, selectionRect, "");
-		DrawZoomInButton(instanceID, selectionRect, "Click to zoom the object"); 
-		DrawPrefabButton(instanceID,selectionRect,"Save as prefab");
+		DrawZoomInButton(instanceID, selectionRect, "Click to zoom the object");
+		DrawPrefabButton(instanceID, selectionRect, "Save as prefab");
+		DrawDeleteGameObjectButton(instanceID, selectionRect, "Delete gameobject");
 	}
 
 	#region ---------- For Active and Inactive of Gameobjects
@@ -146,6 +147,19 @@ public class CustomHirerachyOptions
 	#endregion ---------------------------------------------------------------
 
 	#region ------------------ Delete the gameobject ------------------
+
+	private static void DrawDeleteGameObjectButton(int id, Rect rect, string tooltip)
+	{
+		GameObject go = EditorUtility.InstanceIDToObject(id) as GameObject;
+		if (go)
+		{
+			DrawButtonWithTexture(rect.x + 220, rect.y, 15, "delete", () =>
+			{
+				Selection.activeGameObject = go;
+				UnityEngine.Object.DestroyImmediate(go);
+			}, go, tooltip);
+		}
+	}
 
 	#endregion ---------------------------------------------------------------
 
