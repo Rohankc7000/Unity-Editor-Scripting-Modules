@@ -15,6 +15,8 @@ public class CustomHirerachyOptions
 		DrawActiveToggleButton(instanceID, selectionRect);
 		AddInfoScriptToGameObject(instanceID);
 		DrawInfoButton(instanceID, selectionRect, "");
+		DrawZoomInButton(instanceID, selectionRect, "Click to zoom the object"); 
+		DrawPrefabButton(instanceID,selectionRect,"Save as prefab");
 	}
 
 	#region ---------- For Active and Inactive of Gameobjects
@@ -45,7 +47,7 @@ public class CustomHirerachyOptions
 
 	#region ---------- For Icons Gameobjects
 
-	static void DrawButtonWithTexture(float x, float y, float size, string name, Action action, GameObject go, string tooltip)
+	private static void DrawButtonWithTexture(float x, float y, float size, string name, Action action, GameObject go, string tooltip)
 	{
 		if (go)
 		{
@@ -83,7 +85,7 @@ public class CustomHirerachyOptions
 		DrawButtonWithTexture(rect.x + 150, rect.y + 2, 14, "info", () => { }, go, tooltip);
 	}
 
-	static void AddInfoScriptToGameObject(int id)
+	private static void AddInfoScriptToGameObject(int id)
 	{
 		GameObject go = EditorUtility.InstanceIDToObject(id) as GameObject;
 		if (go)
@@ -95,7 +97,59 @@ public class CustomHirerachyOptions
 			}
 		}
 	}
-
 	#endregion ----------------------------------------------
 
+
+	#region ------------------ For Zooming the GameObject ------------------
+
+	private static void DrawZoomInButton(int id, Rect rect, string tooltip)
+	{
+		GameObject go = EditorUtility.InstanceIDToObject(id) as GameObject;
+		if (go)
+		{
+			DrawButtonWithTexture(rect.x + 175, rect.y + 3, 14, "zoomIn", () =>
+			{
+				Selection.activeGameObject = go;
+				SceneView.FrameLastActiveSceneView();
+			}, go, tooltip);
+		}
+	}
+
+	#endregion ---------------------------------------------------------------
+
+
+
+	#region ------------------ For Creating the prefab ------------------
+
+	private static void DrawPrefabButton(int id, Rect rect, string tooltip)
+	{
+		GameObject go = EditorUtility.InstanceIDToObject(id) as GameObject;
+		if (go)
+		{
+			DrawButtonWithTexture(rect.x + 198, rect.y, 18, "prefab", () =>
+			{
+				const string pathToPrefabsFolder = "Assets/Prefabs";
+				bool prefabFolderExist = AssetDatabase.IsValidFolder(pathToPrefabsFolder);
+				if (!prefabFolderExist)
+				{
+					AssetDatabase.CreateFolder("Assets", "Prefabs");
+				}
+				string prefabName = go.name + ".prefab";
+				string prefabPath = pathToPrefabsFolder + "/" + prefabName;
+				AssetDatabase.DeleteAsset(prefabPath);
+				GameObject prefab = PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+				EditorGUIUtility.PingObject(prefab);
+			}, go, tooltip);
+		}
+	}
+
+	#endregion ---------------------------------------------------------------
+
+	#region ------------------ Delete the gameobject ------------------
+
+	#endregion ---------------------------------------------------------------
+
+	#region ------------------ Region Name ------------------
+
+	#endregion ---------------------------------------------------------------
 }
