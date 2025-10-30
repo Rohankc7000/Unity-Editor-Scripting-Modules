@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-	public GameObject gameobject;
+	public GameObject rohan;
 }
