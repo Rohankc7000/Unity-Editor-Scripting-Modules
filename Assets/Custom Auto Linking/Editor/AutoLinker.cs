@@ -57,14 +57,12 @@ public class AutoLinker : Editor
 	{
 		foreach (string item in inspectorFieldnameToSerializedPropertyMap.Keys)
 		{
-			Debug.Log("Inside for eac...");
 			string key = item.ToLower().Replace(" ", "");
 			if (hierarchyNameToGameobjectMap.ContainsKey(key))
 			{
 				SerializedProperty serializedProperty = inspectorFieldnameToSerializedPropertyMap[key].FindProperty(key);
 				serializedProperty.objectReferenceValue = hierarchyNameToGameobjectMap[key];
 				serializedProperty.serializedObject.ApplyModifiedProperties();
-				Debug.Log("Applied...");
 			}
 		}
 	}
