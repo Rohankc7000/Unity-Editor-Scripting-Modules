@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using System.IO;
 
 public class ProjectOrganizerWindow : EditorWindow
 {
@@ -102,6 +103,18 @@ public class ProjectOrganizerWindow : EditorWindow
 			{
 				DrawOrganizerRow(i);
 			}
+			DrawAddAndRemoveControls();
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+
+			if (GUILayout.Button("Organize"))
+			{
+				OrganizeFilesIntoFolders();
+			}
 		}
 		else
 		{
@@ -109,7 +122,79 @@ public class ProjectOrganizerWindow : EditorWindow
 			{
 				DrawAssetTypeRow(i);
 			}
+			DrawAddAndRemoveControls();
 		}
+	}
+
+	private void OrganizeFilesIntoFolders()
+	{
+		Dictionary<string, string> fileExtensionsToFolderPathsMap = new Dictionary<string, string>();
+		foreach (string assetTypeName in assetTypes.Keys)
+		{
+			for (int i = 0; i < assetTypes[assetTypeName].Count; i++)
+			{
+				string folderPath = $"Assets/{assetTypeName}/";
+				fileExtensionsToFolderPathsMap.Add(assetTypes[assetTypeName][i], folderPath);
+			}
+		}
+		DirectoryInfo dir = new DirectoryInfo("Assets/");
+		foreach (string fileExtension in fileExtensionsToFolderPathsMap.Keys)
+		{
+			string query = "*" + fileExtension;
+			FileInfo[] infos = dir.GetFiles(query);
+			foreach (FileInfo file in infos)
+			{
+				string filePath = fileExtensionsToFolderPathsMap[fileExtension] + file.Name;
+				AssetDatabase.MoveAsset($"Assets/{file.Name}", filePath);
+			}
+		}
+
+	}
+
+	private void DrawAddAndRemoveControls()
+	{
+		GUILayout.BeginHorizontal();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		GUIContent add = new GUIContent();
+		add.text = "+";
+		if (GUILayout.Button(add))
+		{
+			if (selectedTabIndex == 0)
+			{
+				countOfOrganizerRows++;
+				orgainzerRows.Add(new OrganizerRow());
+			}
+			else
+			{
+				countOfAssetTypeRows++;
+				assetTypeRows.Add(new AssetTypeRow());
+			}
+		}
+		GUIContent remove = new GUIContent();
+		remove.text = "-";
+		if (GUILayout.Button(remove))
+		{
+			if (selectedTabIndex == 0)
+			{
+				countOfOrganizerRows--;
+				orgainzerRows.RemoveAt(orgainzerRows.Count - 1);
+			}
+			else
+			{
+				countOfAssetTypeRows--;
+				assetTypeRows.RemoveAt(assetTypeRows.Count - 1);
+			}
+		}
+		GUILayout.EndHorizontal();
 	}
 
 	private void DrawOrganizerRow(int currentIndex)
