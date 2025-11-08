@@ -10,14 +10,30 @@ public class CustomHirerachyOptions
 		EditorApplication.hierarchyWindowItemOnGUI += hirerachyWindowItemOnGUI;
 
 	}
+
+	private static string gameobjectName;
+	public static bool IsFavorited
+	{
+		get { return EditorPrefs.GetBool("favorite" + gameobjectName, false); }
+		set { EditorPrefs.SetBool("favorite" + gameobjectName, value); }
+	}
+
 	private static void hirerachyWindowItemOnGUI(int instanceID, Rect selectionRect)
 	{
-		DrawActiveToggleButton(instanceID, selectionRect);
-		AddInfoScriptToGameObject(instanceID);
-		DrawInfoButton(instanceID, selectionRect, "");
-		DrawZoomInButton(instanceID, selectionRect, "Click to zoom the object");
-		DrawPrefabButton(instanceID, selectionRect, "Save as prefab");
-		DrawDeleteGameObjectButton(instanceID, selectionRect, "Delete gameobject");
+		GameObject gameObject = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+		if (gameObject != null)
+		{
+			gameobjectName = gameObject.name;
+			//Debug.Log(IsFavorited);
+
+			DrawActiveToggleButton(instanceID, selectionRect);
+			AddInfoScriptToGameObject(instanceID);
+			DrawInfoButton(instanceID, selectionRect, "");
+			DrawZoomInButton(instanceID, selectionRect, "Click to zoom the object");
+			DrawPrefabButton(instanceID, selectionRect, "Save as prefab");
+			DrawDeleteGameObjectButton(instanceID, selectionRect, "Delete gameobject");
+			DrawFavoriteButton(instanceID, selectionRect, "Add to favorites");
+		}
 	}
 
 	#region ---------- For Active and Inactive of Gameobjects
@@ -48,7 +64,7 @@ public class CustomHirerachyOptions
 
 	#region ---------- For Icons Gameobjects
 
-	private static void DrawButtonWithTexture(float x, float y, float size, string name, Action action, GameObject go, string tooltip)
+	private static void DrawButtonWithTexture(float x, float y, float size, string imageName, Action action, GameObject go, string tooltip)
 	{
 		if (go)
 		{
@@ -59,7 +75,7 @@ public class CustomHirerachyOptions
 			guiStyle.stretchWidth = true;
 
 			Rect r = DrawRect(x, y, size);
-			Texture t = Resources.Load<Texture>(name);
+			Texture t = Resources.Load<Texture>(imageName);
 			GUIContent gUIContent = new GUIContent();
 			gUIContent.text = "";
 			gUIContent.image = t;
@@ -163,8 +179,31 @@ public class CustomHirerachyOptions
 
 	#endregion ---------------------------------------------------------------
 
-	#region ------------------ Region Name ------------------
+	#region ------------------ Favorite System ------------------
 
+	private static void DrawFavoriteButton(int id, Rect rect, string tooltip)
+	{
+		GameObject gameObject = EditorUtility.InstanceIDToObject(id) as GameObject;
+		if (gameObject)
+		{
+
+			if (IsFavorited)
+			{
+				DrawButtonWithTexture(rect.x + 125, rect.y + 3, 10, "favorite_filled", () =>
+				{
+				}, gameObject, tooltip);
+			}
+			else
+			{
+				DrawButtonWithTexture(rect.x + 125, rect.y + 3, 10, "favorite_outline",
+					() =>
+					{
+						IsFavorited = !IsFavorited;
+						FavoriteMenu.AddToFavorites(gameObject);
+					}, gameObject, tooltip);
+			}
+		}
+	}
 
 	#endregion ---------------------------------------------------------------
 
@@ -177,8 +216,8 @@ public class CustomHirerachyOptions
 	#region ------------------ Region Name ------------------
 
 	#endregion ---------------------------------------------------------------
-	
-	
+
+
 	#region ------------------ Region Name ------------------
 
 	#endregion ---------------------------------------------------------------
