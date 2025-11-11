@@ -36,7 +36,7 @@ public class ProjectOrganizerWindow : EditorWindow
 		{"Images",new List<string>(){".png",".jpeg"}},
 	};
 
-	[MenuItem("Window/Project Oraganizer Tool")]
+	[MenuItem("Custom Tools/Project Oraganizer Tool")]
 	public static void ShowWindow()
 	{
 		EditorWindow window = GetWindow<ProjectOrganizerWindow>("Project Oraganizer Tool");

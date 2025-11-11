@@ -9,7 +9,7 @@ public class BatchRenameToolWindow : EditorWindow
 	string batchNumber = "";
 	bool showOptions = true;
 
-	[MenuItem("Window/Batch Rename")]
+	[MenuItem("Custom Tools/Batch Rename")]
 	public static void ShowWindow()
 	{
 		EditorWindow window = GetWindow<BatchRenameToolWindow>("Batch Rename");

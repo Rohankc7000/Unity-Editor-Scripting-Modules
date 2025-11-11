@@ -36,37 +36,37 @@ public class FavoriteMenu : EditorWindow
 		EditorGUIUtility.PingObject(cloneOfGameObject);
 	}
 
-	[MenuItem("Favorites/Favorite Object 1", false, 50)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 1", false, 50)]
 	public static void HandleFavoriteItem1Clicked()
 	{
 		HandleFavoriteItemClicked(0);
 	}
 
-	[MenuItem("Favorites/Favorite Object 1", true)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 1", true)]
 	public static bool HandleFavoriteItem1Option()
 	{
 		return favoritedObjects.Count >= 1;
 	}
 
-	[MenuItem("Favorites/Favorite Object 2", false, 50)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 2", false, 50)]
 	public static void HandleFavoriteItem2Clicked()
 	{
 		HandleFavoriteItemClicked(1);
 	}
 
-	[MenuItem("Favorites/Favorite Object 2", true)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 2", true)]
 	public static bool HandleFavoriteItem2Option()
 	{
 		return favoritedObjects.Count >= 2;
 	}
 
-	[MenuItem("Favorites/Favorite Object 3", false, 50)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 3", false, 50)]
 	public static void HandleFavoriteItem3Clicked()
 	{
 		HandleFavoriteItemClicked(2);
 	}
 
-	[MenuItem("Favorites/Favorite Object 3", true)]
+	[MenuItem("Custom Tools/Favorites/Favorite Object 3", true)]
 	public static bool HandleFavoriteItem3Option()
 	{
 		return favoritedObjects.Count >= 3;
@@ -78,7 +78,7 @@ public class FavoriteMenu : EditorWindow
 		favoritedObjects.Clear();
 	}
 
-	[MenuItem("Favorites/Clear Favorites", false, 100)]
+	[MenuItem("Custom Tools/Favorites/Clear Favorites", false, 100)]
 	public static void ClearFavoriteMenu()
 	{
 		favoritedObjects.Clear();
