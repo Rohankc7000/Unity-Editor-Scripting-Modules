@@ -18,7 +18,7 @@ public class ImageOptimizer : Editor
 			int maxDimensionSize = Math.Max(width, height);
 			TextureImporterSettings textureImporterSettings = new TextureImporterSettings();
 			importer.ReadTextureSettings(textureImporterSettings);
-			textureImporterSettings.maxTextureSize = (int)Math.Pow(2, (int)Math.Log(maxDimensionSize - 1, 2) + 1);
+			textureImporterSettings.maxTextureSize = Mathf.NextPowerOfTwo(Mathf.Max(1, maxDimensionSize));
 			importer.SetTextureSettings(textureImporterSettings);
 			EditorUtility.SetDirty(importer);
 			importer.SaveAndReimport();
